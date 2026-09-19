@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Luna Lab Runtime</title>
+</head>
+<body>
+  <h1>Luna Lab Runtime</h1>
+  <p id="status">Calling the external runtime…</p>
+  <pre id="output"></pre>
+
+  <script>
+    fetch("/luna")
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("status").textContent =
+          "External runtime responded.";
+        document.getElementById("output").textContent =
+          JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.getElementById("status").textContent = "Runtime error.";
+        document.getElementById("output").textContent = String(error);
+      });
+  </script>
+</body>
+</html>
