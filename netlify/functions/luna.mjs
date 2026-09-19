@@ -1,6 +1,6 @@
 import { getStore } from "@netlify/blobs";
 
-export default async (req) => {
+export default async () => {
   const store = getStore("luna-lab");
   const key = "runtime.json";
 
@@ -9,26 +9,17 @@ export default async (req) => {
     events: []
   };
 
-  const event = {
-    timestamp: new Date().toISOString(),
-    type: req.method === "GET" ? "manual" : "request",
-    message: "Luna Lab external runtime executed."
-  };
-
-  current.invocationCount += 1;
-  current.events = [event, ...current.events].slice(0, 50);
-
-  await store.setJSON(key, current);
-
   return new Response(JSON.stringify({
     ok: true,
     invocationCount: current.invocationCount,
-    latest: event,
-    boundary:
-      "Execution is limited to the permissions and runtime granted to this deployed function."
+    latest: current.events?.[0] || null,
+    events: current.events || [],
+    runtime: "Netlify Function + Netlify Blobs",
+    ai: "Netlify AI Gateway"
   }, null, 2), {
     headers: {
-      "content-type": "application/json; charset=utf-8"
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store"
     }
   });
 };
