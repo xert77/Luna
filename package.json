@@ -2,6 +2,7 @@
   "name": "luna-lab",
   "private": true,
   "dependencies": {
-    "@netlify/blobs": "latest"
+    "@netlify/blobs": "latest",
+    "openai": "latest"
   }
 }
